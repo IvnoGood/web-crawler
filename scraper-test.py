@@ -7,10 +7,13 @@ from bs4 import BeautifulSoup
 import re
 from colorama import Fore, Style
 
-def CheckLinks(links, UrlToScrape):
+main = "fr.cornhub.website/"
+UrlToScrape = 'https://fr.cornhub.website/model/gijs'
+
+def CheckLinks(links, UrlToScrape, main):
     ValidLinks = set()
     for link in links:
-        result = re.search("fr.cornhub.website/", link)
+        result = re.search(main, link)
         if result and link != UrlToScrape:
             ValidLinks.add(link)
             print(Fore.GREEN + "valid link: ", link)
@@ -19,9 +22,8 @@ def CheckLinks(links, UrlToScrape):
     return ValidLinks
 
 
-def scrape():
+def scrape(main, UrlToScrape):
     # Target URL for scraping
-    UrlToScrape = 'https://fr.cornhub.website/model/gijs'
 
     # Send a GET request to fetch the HTML content
     response = requests.get(UrlToScrape)
@@ -33,7 +35,6 @@ def scrape():
     description = soup.find("p").getText() #type: ignore
     links = [a.get('href') for a in soup.find_all('a', href=True)]
 
-    
 
     if (title == None):
         title = soup.select_one('title').text #type: ignore
@@ -45,7 +46,7 @@ def scrape():
         url = UrlToScrape
         print("Not using meta tag for url")
 
-    links= CheckLinks(links, UrlToScrape)
+    links= CheckLinks(links, UrlToScrape, main)
 
 
     # Print extracted content
@@ -60,4 +61,4 @@ def scrape():
     print(Style.RESET_ALL + '\n')
 
 if __name__ == '__main__':
-    scrape()
+    scrape(main, UrlToScrape)

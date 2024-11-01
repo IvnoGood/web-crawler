@@ -18,6 +18,13 @@ def is_url(s):
     except ValueError:
         return False
 
+def ToCSV(title, text, link):
+    content = [title, text, link]
+    with open('scraper.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(content)
+        print("written !")
+
 
 def scrape(root):
     url = root
@@ -36,11 +43,7 @@ def scrape(root):
         print(link)
 
         # Save extracted data to CSV
-        content = [title, text, link]
-        with open('scraper.csv', mode='a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(content)
-            print("written !")
+        
 
         if is_url(url):
             url = link
