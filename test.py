@@ -1,13 +1,21 @@
-import re
 
-# The string to extract from
-text = 'name="Description" content="Well organized and easy to understand Web building tutorials with lots of examples of how to use HTML, CSS, JavaScript, SQL, Python, PHP, Bootstrap, Java, XML and more."'
+WordDictionnary = {}
+paragraphs = ["hi i am bob"]
 
-# Use regex to capture the content inside content="..."
-content = re.search(r'content="([^"]+)"', text).group(1) # type: ignore
 
-# Check if there is a match and print the content
-if content:
-    print("Content:",content ) 
-else:
-    print("No content found.")
+def SetWordDictionnary(paragraphs, WordDictionnary):
+    for paragraph in paragraphs:
+        for word in paragraph.split():
+            if not word.istitle():
+                if word in WordDictionnary:
+                    # Increment count if word is already in the dictionary
+                    WordDictionnary[word] += 1
+                else:
+                    # Initialize count to 1 if word is new
+                    WordDictionnary[word] = 1
+
+
+
+SetWordDictionnary(paragraphs, WordDictionnary)
+print(WordDictionnary)
+

@@ -13,6 +13,7 @@ import attrs
 import re
 from colorama import Fore, Style
 import os
+import json
 
 main = "fr.cornhub.website/"
 UrlToScrape = 'https://fr.cornhub.website/model/gijs'
@@ -20,6 +21,8 @@ UrlToScrape = 'https://fr.cornhub.website/model/gijs'
 filename = "0scraper.csv"
 QueueLinks = []
 AllLinks = []
+
+WordDictionnary = {}
 
 
 def is_url(s):
@@ -30,8 +33,8 @@ def is_url(s):
         return False
 
 
-def ToCSV(filename, url, title, description):
-    content = [url, title, description]
+def ToCSV(filename, url, title, paragraphs):
+    content = [url, title, paragraphs]
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(content)
@@ -50,6 +53,13 @@ def CheckLinks(links, UrlToScrape, main):
     return ValidLinks
 
 
+def SetWordDictionnary(paragraphs, WordDictionnary):
+    for paragraph in paragraphs:
+        for word in paragraph.split():
+            if not word.istitle():
+                word[WordDictionnary] += 1
+
+
 def scrape(main, UrlToScrape):
     # Target URL for scraping
 
@@ -57,10 +67,10 @@ def scrape(main, UrlToScrape):
     response = requests.get(UrlToScrape)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Extract the title, text, description and all links
+    # Extract the title, text, paragraphs and all links
     url = soup.find("meta", property="og:url")
     title = soup.find("meta", property="og:title")
-    description = soup.find("p").getText()  # type: ignore
+    paragraphs = [p.get_text() for p in soup.find_all("p")]  # type: ignore
     links = [a.get('href') for a in soup.find_all('a', href=True)]
 
     if (title == None):
@@ -80,7 +90,7 @@ def scrape(main, UrlToScrape):
     print(Style.RESET_ALL)
     print("Curerent url:", url, '\n')
     print("Title:", title, '\n')
-    print("Description:", description, '\n')
+    print("paragraphs:", paragraphs, '\n')
     print("Links found on the page:")
     # print("disabled in code")
     for link in links:
@@ -88,7 +98,7 @@ def scrape(main, UrlToScrape):
     print(Style.RESET_ALL + '\n')
 
     # return all the values for later use
-    return url, title, description, links
+    return url, title, paragraphs, links
 
 
 def Crawler(links, QueueLinks, UrlToScrape):
@@ -123,7 +133,7 @@ if __name__ == '__main__':
 
     with open(filename, mode='a', newline=''):
         # identifying header
-        header = ['Url', 'title', 'description']
+        header = ['Url', 'title', 'paragraphs']
 
         writer = csv.DictWriter(
             open(filename, mode='w', newline=''), fieldnames=header)
@@ -131,8 +141,8 @@ if __name__ == '__main__':
         # writing data row-wise into the csv file
         writer.writeheader()
     while True:
-        url, title, description, links = scrape(main, UrlToScrape)
-        ToCSV(filename, url, title, description)
+        url, title, paragraphs, links = scrape(main, UrlToScrape)
+        ToCSV(filename, url, title, paragraphs)
         QueueLinks, UrlToScrape = Crawler(links, QueueLinks, UrlToScrape)
         time.sleep(5)
 
