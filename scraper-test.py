@@ -31,8 +31,10 @@ def SetWordDictionnary(paragraphs, WordDictionnary):
                 # Initialize count to 1 if word is new
                 WordDictionnary[word] = 1
 
+
 def TF():
     ##
+    print()
 
 
 def scrape(main, UrlToScrape):
