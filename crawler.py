@@ -1,19 +1,14 @@
 # scraper-python.py
 # To run this script, paste `python scraper-python.py` in the terminal
 
-from pydantic_core import Url
 import requests
 from bs4 import BeautifulSoup
 import csv
 import urllib.parse
 import time
-from unittest import result
-import attr
-import attrs
 import re
 from colorama import Fore, Style
 import os
-import json
 
 main = "fr.cornhub.website/"
 UrlToScrape = 'https://fr.cornhub.website/model/gijs'
