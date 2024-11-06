@@ -4,10 +4,6 @@ from bs4 import BeautifulSoup
 import re
 from colorama import Fore, Style
 
-main = "fr.cornhub.website/"
-UrlToScrape = 'https://fr.cornhub.website/model/gijs'
-WordDictionnary = {}
-
 
 def CheckLinks(links, UrlToScrape, main):
     ValidLinks = set()
@@ -30,11 +26,7 @@ def SetWordDictionnary(paragraphs, WordDictionnary):
             else:
                 # Initialize count to 1 if word is new
                 WordDictionnary[word] = 1
-
-
-def TF():
-    ##
-    print()
+    return WordDictionnary
 
 
 def scrape(main, UrlToScrape):
@@ -75,9 +67,3 @@ def scrape(main, UrlToScrape):
     print(Style.RESET_ALL + '\n')
 
     return url, title, paragraphs, links
-
-
-if __name__ == '__main__':
-    url, title, paragraphs, links = scrape(main, UrlToScrape)
-    SetWordDictionnary(paragraphs, WordDictionnary)
-    print(WordDictionnary)

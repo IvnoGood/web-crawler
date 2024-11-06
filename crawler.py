@@ -1,14 +1,18 @@
 # scraper-python.py
 # To run this script, paste `python scraper-python.py` in the terminal
 
-import requests
-from bs4 import BeautifulSoup
 import csv
-import urllib.parse
 import time
-import re
 from colorama import Fore, Style
 import os
+
+from .assets.idgen import Hash
+from .assets.urlvalidation import is_url
+from .assets.scraper import scrape
+from .assets.scraper import CheckLinks
+from .assets.scraper import SetWordDictionnary
+from .assets.CsvAppend import ToCSV
+
 
 main = "fr.cornhub.website/"
 UrlToScrape = 'https://fr.cornhub.website/model/gijs'
@@ -18,82 +22,6 @@ QueueLinks = []
 AllLinks = []
 
 WordDictionnary = {}
-
-
-def is_url(s):
-    try:
-        result = urllib.parse.urlparse(s)
-        return all([result.scheme, result.netloc])
-    except ValueError:
-        return False
-
-
-def ToCSV(filename, url, title, paragraphs):
-    content = [url, title, paragraphs]
-    with open(filename, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(content)
-        print("written !")
-
-
-def CheckLinks(links, UrlToScrape, main):
-    ValidLinks = set()
-    for link in links:
-        result = re.search(main, link)
-        if result and link != UrlToScrape:
-            ValidLinks.add(link)
-            print(Fore.GREEN + "valid link: ", link)
-        else:
-            print(Fore.RED + "not valid link: ", link)
-    return ValidLinks
-
-
-def SetWordDictionnary(paragraphs, WordDictionnary):
-    for paragraph in paragraphs:
-        for word in paragraph.split():
-            if not word.istitle():
-                word[WordDictionnary] += 1
-
-
-def scrape(main, UrlToScrape):
-    # Target URL for scraping
-
-    # Send a GET request to fetch the HTML content
-    response = requests.get(UrlToScrape)
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # Extract the title, text, paragraphs and all links
-    url = soup.find("meta", property="og:url")
-    title = soup.find("meta", property="og:title")
-    paragraphs = [p.get_text() for p in soup.find_all("p")]  # type: ignore
-    links = [a.get('href') for a in soup.find_all('a', href=True)]
-
-    if (title == None):
-        title = soup.select_one('title').text  # type: ignore
-        print("Not using meta tag for title")
-    else:
-        title = re.search(r'content="([^"]+)"',
-                          str(title)).group(1)  # type: ignore
-
-    if (url == None):
-        url = UrlToScrape
-        print("Not using meta tag for url")
-
-    links = CheckLinks(links, UrlToScrape, main)
-
-    # Print extracted content
-    print(Style.RESET_ALL)
-    print("Curerent url:", url, '\n')
-    print("Title:", title, '\n')
-    print("paragraphs:", paragraphs, '\n')
-    print("Links found on the page:")
-    # print("disabled in code")
-    for link in links:
-        print(Fore.CYAN + link)
-    print(Style.RESET_ALL + '\n')
-
-    # return all the values for later use
-    return url, title, paragraphs, links
 
 
 def Crawler(links, QueueLinks, UrlToScrape):
