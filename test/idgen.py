@@ -9,3 +9,6 @@ def Hash(uuids, link):
     uuids[gid] = link
     print(uuids)
     return uuids
+
+
+Hash(uuids, link)
