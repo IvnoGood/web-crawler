@@ -8,7 +8,6 @@ def Hash(uuids, link):
     print(gid)
     uuids[gid] = link
     print(uuids)
-    return uuids
 
 
 Hash(uuids, link)

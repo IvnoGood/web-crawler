@@ -6,12 +6,12 @@ import time
 from colorama import Fore, Style
 import os
 
-from .assets.idgen import Hash
-from .assets.urlvalidation import is_url
+# not used: from .assets.HashIndex import HashIndex #get the hash for the link
+# activate when needed: from .assets.urlvalidation import is_url
 from .assets.scraper import scrape
-from .assets.scraper import CheckLinks
 from .assets.scraper import SetWordDictionnary
 from .assets.CsvAppend import ToCSV
+from .assets.reverseIndex import reverseIndex
 
 
 main = "fr.cornhub.website/"
@@ -23,6 +23,9 @@ AllLinks = []
 
 WordDictionnary = {}
 
+
+jsonpath = 'index.json'
+addedwords = {}
 
 def Crawler(links, QueueLinks, UrlToScrape):
     print(QueueLinks)
@@ -64,8 +67,13 @@ if __name__ == '__main__':
         # writing data row-wise into the csv file
         writer.writeheader()
     while True:
-        url, title, paragraphs, links = scrape(main, UrlToScrape)
-        ToCSV(filename, url, title, paragraphs)
+        url, title, paragraphs, links = scrape(main, UrlToScrape) #save from the scrap url links etc...
+        ToCSV(filename, url, title, paragraphs) #save to the csv file all the data
+        SetWordDictionnary(paragraphs, WordDictionnary)
+        
+        for link in links:
+            reverseIndex(jsonpath, addedwords, WordDictionnary, link)
+
         QueueLinks, UrlToScrape = Crawler(links, QueueLinks, UrlToScrape)
         time.sleep(5)
 

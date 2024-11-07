@@ -3,7 +3,75 @@ import random
 import os
 
 
-link = 'dad791a2e6e24c0cbb9839245906939c'
+links = [
+    "https://fr.cornhub.website/video/ch6712a096af6eb",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/video/ch05a284b79b71d",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/video/ch338e7aeae5bbc",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/video/chcff2c0aa54f26",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/model/gijs",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/model/gijs",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/model/cvideos",
+    "https://fr.cornhub.website/video/ch6712a096af6eb",
+    "https://fr.cornhub.website/video/chfe584ab6fa64a",
+    "https://fr.cornhub.website/video/chc0b23fe5ebd56",
+    "https://fr.cornhub.website/video/chb9844c42366b8",
+    "https://fr.cornhub.website/video/ch30a3ecc6f1625",
+    "https://fr.cornhub.website/model",
+    "https://fr.cornhub.website/model/butteredcob",
+    "https://fr.cornhub.website/model/cobbers",
+    "https://fr.cornhub.website/video/ch8ff481b71afad",
+    "https://fr.cornhub.website/video/ch338e7aeae5bbc",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/model/popped",
+    "https://fr.cornhub.website/legal/fairuse",
+    "https://fr.cornhub.website/model/gijs",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/video/chc4b07bc66bda7",
+    "https://fr.cornhub.website/video/ch58861e6f84de4",
+    "https://fr.cornhub.website/video/ch2946eb16a1158",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/model/yebdeb",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/contact",
+    "https://fr.cornhub.website/contact/advertise",
+    "https://fr.cornhub.website/",
+    "https://fr.cornhub.website/legal/terms",
+    "https://fr.cornhub.website/legal/privacy",
+    "https://fr.cornhub.website/model"
+]
 
 # Data to be written
 listwords = {
@@ -16,31 +84,37 @@ addedwords = {}
 path = "sample.json"
 
 
-n = 3
-for i in range(n):
+def reverseIndex(path, addedwords, listwords, link):
+    # check if the json file exists
+    if os.path.isfile(path):
+        with open(path, 'r') as openfile:
+            try:
+                # Try reading from JSON file
+                addedwords = json.load(openfile)
+            except json.JSONDecodeError:
+                print(
+                    "The file contains invalid JSON. Initializing with an empty dictionary.")
+                addedwords = {}
+    else:  # if not generate a new one
+        with open(path, "w") as outfile:
+            print()
+
+    # iterate through each word in the list
+    # then check if the word is in the json
+    # if not add a new one
     for word in listwords:
-        """ if addedwords.get(word) is not None:
-        print("already exists" + word)
-        addedwords.append(link)
+        if link not in addedwords.setdefault(word, []):
+            addedwords[word].append(link)
+  # check and add
 
-    else:
-        print("no exist" + word)
-        addedwords[word] = link  # type: ignore
-         """
-        addedwords.setdefault(word, []).append(link)
-    link = random.randint(500, 1000)
-# Serializing json
-json_object = json.dumps(addedwords, indent=4)
+    json_object = json.dumps(addedwords, indent=4)
 
-if os.path.isfile(path):
-    with open('sample.json', 'r') as openfile:
-        # Reading from json file
-        addedwords = json.load(openfile)
-else:
-    with open("sample.json", "w") as outfile:
-    outfile.write(json_object)
+    print(json_object)
 
-# Writing to sample.json
+    # Writing to sample.json
+    with open(path, "w") as outfile:
+        outfile.write(json_object)
 
 
-print(addedwords)
+for link in links:
+    reverseIndex(path, addedwords, listwords, link)
