@@ -8,7 +8,8 @@ def filter_words_from_file(file_path, listwords):
                 words = line.split()
                 for word in words:
                     # Remove punctuation and convert to lowercase
-                    word = word.strip('.,!?()[]{}"\'').lower()
+                    word = word.lower()
+                    word = word.strip('.,!?()[]{}"\'')
                     # Filter out the word if it's a stop word
                     if word not in listwords:
                         # Add word if it's not a stop word
@@ -31,7 +32,7 @@ listwords = {'The': 1, 'CornHub': 3, 'team': 1, 'is': 3, 'always': 2, 'updating'
 file_path = "stopwords.txt"  # Your text file
 
 # Call the function and print the non-filtered words
-filtered_words = filter_words_from_file(file_path, listwords)
+filter_words_from_file(file_path, listwords)
 
 print(listwords)
 
