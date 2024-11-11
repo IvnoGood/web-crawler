@@ -3,7 +3,7 @@ import uuid
 import os
 
 
-def HashIndex(uuids, links, path):
+def HashIndex(uuids, link, path):
     # check if the json file exists
     if os.path.isfile(path):
         with open(path, 'r') as openfile:
@@ -21,16 +21,17 @@ def HashIndex(uuids, links, path):
     # iterate through each word in the list
     # then check if the word is in the json
     # if not add a new one
-    for link in links:
-        if link not in uuids.values():
-            uid = uuid.uuid4().hex
-            print(uid)
-            uuids[uid] = link
-            print(uuids)
-            if link not in uuids.setdefault(uid, []):
-                uuids[uid].append(link)
+    if link not in uuids.values():
+        uid = uuid.uuid4().hex
+        print(uid)
+        uuids[uid] = link
+        print(uuids)
+        if link not in uuids.setdefault(uid, []):
+            uuids[uid].append(link)
 
     # check and add
     # Save uuids to a JSON file
     with open(path, "w") as outfile:
         json.dump(uuids, outfile, indent=4)
+
+    return uid  # type: ignore

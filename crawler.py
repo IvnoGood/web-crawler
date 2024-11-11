@@ -80,11 +80,11 @@ if __name__ == '__main__':
         ToCSV(filename, url, title, paragraphs)
         print(f"worddictionnary: {WordDictionnary}")
         print(type(WordDictionnary))
+        # set the dictionary for each word
         SetWordDictionnary(paragraphs, WordDictionnary)
         filter_words_from_file(file_path, WordDictionnary)
-        for link in links:
-            reverseIndex(jsonpath, addedwords, WordDictionnary, link)
-            HashIndex(uuids, links, urlindex)
+        url = HashIndex(uuids, url, urlindex)
+        reverseIndex(jsonpath, addedwords, WordDictionnary, url)
 
         QueueLinks, UrlToScrape = Crawler(links, QueueLinks, UrlToScrape)
         time.sleep(5)
