@@ -26,7 +26,7 @@ def reverseIndex(path, addedwords, listwords, link):
 
     json_object = json.dumps(addedwords, indent=4)
 
-    print(json_object)
+    print("wrote to json")
 
     # Writing to sample.json
     with open(path, "w") as outfile:

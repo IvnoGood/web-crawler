@@ -13,6 +13,8 @@ from .assets.scraper import SetWordDictionnary
 from .assets.CsvAppend import ToCSV
 from .assets.reverseIndex import reverseIndex
 from .assets.filterwords import filter_words_from_file
+from .assets.getfavicon import get_favicon_from_html
+from .assets.tfidf import TFIDF
 
 
 main = "fr.cornhub.website/"
@@ -32,6 +34,9 @@ addedwords = {}
 
 uuids = {}
 urlindex = "urlindex.json"
+
+addedTf = {}
+TfPath = './tf.json'
 
 
 def Crawler(links, QueueLinks, UrlToScrape):
@@ -66,7 +71,7 @@ if __name__ == '__main__':
 
     with open(filename, mode='a', newline=''):
         # identifying header
-        header = ['Url', 'title', 'paragraphs']
+        header = ['Url', 'Favicon', 'title', 'paragraphs']
 
         writer = csv.DictWriter(
             open(filename, mode='w', newline=''), fieldnames=header)
@@ -77,13 +82,16 @@ if __name__ == '__main__':
         # save from the scrap url links etc...
         url, title, paragraphs, links = scrape(main, UrlToScrape)
         # save to the csv file all the data
-        ToCSV(filename, url, title, paragraphs)
+        favicon = get_favicon_from_html(url)
+        print(f"favicon: {favicon}")
+        ToCSV(filename, url, title, paragraphs, favicon)
         print(f"worddictionnary: {WordDictionnary}")
         print(type(WordDictionnary))
         # set the dictionary for each word
         SetWordDictionnary(paragraphs, WordDictionnary)
         filter_words_from_file(file_path, WordDictionnary)
         url = HashIndex(uuids, url, urlindex)
+        TFIDF(TfPath, addedTf, url, WordDictionnary)
         reverseIndex(jsonpath, addedwords, WordDictionnary, url)
 
         QueueLinks, UrlToScrape = Crawler(links, QueueLinks, UrlToScrape)

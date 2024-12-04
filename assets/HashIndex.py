@@ -23,9 +23,7 @@ def HashIndex(uuids, link, path):
     # if not add a new one
     if link not in uuids.values():
         uid = uuid.uuid4().hex
-        print(uid)
         uuids[uid] = link
-        print(uuids)
         if link not in uuids.setdefault(uid, []):
             uuids[uid].append(link)
 

@@ -1,9 +1,9 @@
 import csv
 
 
-def ToCSV(filename, url, title, paragraphs):
+def ToCSV(filename, url, title, paragraphs, favicon):
     paragraphs = paragraphs[0]
-    content = [url, title, paragraphs]
+    content = [url, favicon ,title, paragraphs]
 
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
