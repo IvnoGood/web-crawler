@@ -95,6 +95,10 @@ if __name__ == '__main__':
         reverseIndex(jsonpath, addedwords, WordDictionnary, url)
 
         QueueLinks, UrlToScrape = Crawler(links, QueueLinks, UrlToScrape)
+
+        # reset some variables
+        WordDictionnary = {}
+
         time.sleep(5)
 
 

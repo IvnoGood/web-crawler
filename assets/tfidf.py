@@ -23,5 +23,3 @@ def TFIDF(path, addedwords, uuid, lisofwords):
     # Write to sample.json
     with open(path, "w") as outfile:
         outfile.write(json_object)
-
-    print(json_object)
